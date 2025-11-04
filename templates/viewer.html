@@ -40,6 +40,10 @@
     button:hover {
       background-color: #3182ce;
     }
+    button:disabled {
+      background-color: #a0aec0;
+      cursor: not-allowed;
+    }
     .topbar { 
       display: flex; 
       justify-content: space-between; 
@@ -77,6 +81,30 @@
       color: #4a5568;
       margin-bottom: 15px;
     }
+    .status-message {
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      display: none;
+    }
+    .status-message.success {
+      background-color: #c6f6d5;
+      color: #22543d;
+      border: 1px solid #9ae6b4;
+      display: block;
+    }
+    .status-message.error {
+      background-color: #fed7d7;
+      color: #742a2a;
+      border: 1px solid #fc8181;
+      display: block;
+    }
+    .status-message.info {
+      background-color: #bee3f8;
+      color: #2c5282;
+      border: 1px solid #90cdf4;
+      display: block;
+    }
     @media (min-width: 640px) {
       .input-group {
         display: flex;
@@ -102,11 +130,13 @@
     <p>Enter your Viewer ID and the Owner ID to fetch location access (if authorized).</p>
     
     <div class="input-group">
-      <input type="text" id="owner" placeholder="Owner ID (e.g. user123)" />
-      <input type="text" id="viewer" placeholder="Viewer ID (e.g. agent456)" />
+      <input type="text" id="owner" placeholder="Owner ID (e.g. User123)" />
+      <input type="text" id="viewer" placeholder="Viewer ID (e.g. Agent1)" />
     </div>
-    <input type="password" id="passphrase" placeholder="Passphrase (same as owner's)" />
-    <button onclick="fetchOwnerLocation()">🔍 Fetch Owner's Location</button>
+    <input type="password" id="passphrase" placeholder="Passphrase (same as owner's)" value="mySecret123" />
+    <button id="fetchBtn" onclick="fetchOwnerLocation()">🔍 Fetch Owner's Location</button>
+    
+    <div id="statusMessage" class="status-message"></div>
   </div>
 
   <div id="map"></div>
@@ -134,6 +164,20 @@
 
     console.log('🌐 API Base URL:', API_BASE_URL);
 
+    // ------------------- STATUS MESSAGE HELPER -------------------
+    function showStatus(message, type = 'info') {
+      const statusDiv = document.getElementById('statusMessage');
+      statusDiv.textContent = message;
+      statusDiv.className = `status-message ${type}`;
+      
+      // Auto-hide after 10 seconds for success/info messages
+      if (type !== 'error') {
+        setTimeout(() => {
+          statusDiv.style.display = 'none';
+        }, 10000);
+      }
+    }
+
     // ------------------- MAP SETUP -------------------
     function initMap(lat, lon) {
       console.log("%c🗺 Initializing map...", "color: dodgerblue;");
@@ -142,11 +186,15 @@
           console.log("%c♻ Removing previous map instance", "color: orange;");
           map.remove();
         }
-        map = L.map("map").setView([lat, lon], 14);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
+        map = L.map("map").setView([lat, lon], 15);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { 
+          maxZoom: 19,
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
         console.log("%c✅ Map initialized successfully", "color: green;");
       } catch (err) {
         console.error("❌ Error initializing map:", err);
+        showStatus("Failed to initialize map: " + err.message, 'error');
       }
     }
 
@@ -168,7 +216,7 @@
         }
 
         const marker = L.marker([lat, lon], { icon }).addTo(map);
-        marker.bindPopup(text);
+        marker.bindPopup(text).openPopup();
         console.log("%c✅ Marker added successfully", "color: green;");
       } catch (err) {
         console.error(`❌ Failed to add marker at [${lat}, ${lon}] →`, err.message);
@@ -243,7 +291,6 @@
         return decrypted;
       } catch (err) {
         console.error("❌ Error decrypting data:", err);
-        alert("❌ Decryption failed. Check passphrase or server data.");
         return null;
       }
     }
@@ -255,13 +302,19 @@
       const owner = document.getElementById("owner").value.trim();
       const viewer = document.getElementById("viewer").value.trim();
       const passphrase = document.getElementById("passphrase").value.trim();
+      const fetchBtn = document.getElementById("fetchBtn");
 
       if (!owner || !viewer || !passphrase) {
-        alert("⚠ Please enter owner ID, viewer ID, and passphrase.");
+        showStatus("⚠ Please enter owner ID, viewer ID, and passphrase.", 'error');
         return;
       }
 
       console.log(`Attempting to fetch location: Owner=${owner}, Viewer=${viewer}`);
+      
+      // Disable button during fetch
+      fetchBtn.disabled = true;
+      fetchBtn.textContent = "🔄 Fetching...";
+      showStatus("Checking access permissions...", 'info');
 
       try {
         const res = await fetch(`${API_BASE_URL}/view_location`, {
@@ -273,41 +326,64 @@
         const data = await res.json();
         console.log("%c📨 Received response:", "color: limegreen;", data);
 
-        if (data.error) {
-          alert("❌ " + data.error);
+        if (res.status === 403 || data.error) {
+          const errorMsg = data.error || "Access denied";
+          console.error("❌ Access error:", errorMsg);
+          showStatus(`❌ ${errorMsg}. Please ask the owner to grant you access first.`, 'error');
+          fetchBtn.disabled = false;
+          fetchBtn.textContent = "🔍 Fetch Owner's Location";
           return;
         }
+
+        if (!data.enc_data) {
+          showStatus("❌ No encrypted location data received from server.", 'error');
+          fetchBtn.disabled = false;
+          fetchBtn.textContent = "🔍 Fetch Owner's Location";
+          return;
+        }
+
+        showStatus("🔓 Decrypting location data...", 'info');
 
         // 🔓 Decrypt received encrypted data
         const decrypted = await decryptEnvelope(data.enc_data, passphrase);
         if (!decrypted) {
-          console.warn("⚠ Decryption returned null.");
+          showStatus("❌ Decryption failed. Please verify the passphrase matches the owner's.", 'error');
+          fetchBtn.disabled = false;
+          fetchBtn.textContent = "🔍 Fetch Owner's Location";
           return;
         }
 
-        if (!decrypted.center) {
-          alert("⚠ No valid location found for owner.");
+        if (!decrypted.center || !decrypted.center.lat || !decrypted.center.lon) {
+          showStatus("⚠ No valid location coordinates found in decrypted data.", 'error');
+          fetchBtn.disabled = false;
+          fetchBtn.textContent = "🔍 Fetch Owner's Location";
           return;
         }
 
-        // ✅ Only show owner's main (real) location
+        // ✅ Only show owner's main (real) location - the RED marker
         const center = decrypted.center;
         console.log("%c📍 Owner's center location:", "color: yellow;", center);
         
         initMap(center.lat, center.lon);
-        addMarker(center.lat, center.lon, "red", "📍 Owner's Current Location");
+        addMarker(center.lat, center.lon, "red", `📍 ${owner}'s Current Location`);
 
-        alert("✅ Access verified — displaying owner's live location.");
+        showStatus(`✅ Access verified — displaying ${owner}'s live location.`, 'success');
+        fetchBtn.disabled = false;
+        fetchBtn.textContent = "🔍 Fetch Owner's Location";
+        
       } catch (err) {
         console.error("❌ Error fetching location:", err);
-        alert("❌ Failed to fetch owner's location. Ensure access is active and server is reachable.");
+        showStatus("❌ Network error: " + err.message + ". Please check server connection.", 'error');
+        fetchBtn.disabled = false;
+        fetchBtn.textContent = "🔍 Fetch Owner's Location";
       }
     }
 
     // Initialize map on page load with a default location
     document.addEventListener("DOMContentLoaded", () => {
       console.log("%c🚀 Page loaded - initializing default map view", "color: cyan;");
-      initMap(37.422, -122.084); // Default to Google HQ
+      initMap(13.0827, 80.2707); // Default to Chennai
+      showStatus("ℹ️ Enter credentials and click 'Fetch Owner's Location' to view their position.", 'info');
     });
   </script>
 </body>
