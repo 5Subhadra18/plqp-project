@@ -104,6 +104,26 @@
   <script>
 let map;
 
+// ✅ DYNAMIC API BASE URL - Automatically detects environment
+const API_BASE_URL = (() => {
+  const hostname = window.location.hostname;
+  
+  // If running on localhost or 127.0.0.1, use localhost with port
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return 'http://localhost:5000';
+  }
+  
+  // If running on Render deployment
+  if (hostname === 'plqp-project.onrender.com') {
+    return 'https://plqp-project.onrender.com';
+  }
+  
+  // Fallback to current origin for any other deployment
+  return window.location.origin;
+})();
+
+console.log('🌐 API Base URL:', API_BASE_URL);
+
 // ======================= MAP SETUP =======================
 function initMap(lat, lon) {
   console.log("%c🗺 Initializing map...", "color: dodgerblue;");
@@ -142,8 +162,8 @@ function addMarker(lat, lon, color = "blue", text = "Marker") {
     const marker = L.marker([lat, lon], { icon }).addTo(map);
     marker.bindPopup(text);
   } catch (err) {
-    console.error(`❌ Failed to add marker at [${lat}, ${lon}] →, err.message`);
-}
+    console.error(`❌ Failed to add marker at [${lat}, ${lon}] →`, err.message);
+  }
 }
 
 // ======================= CRYPTO HELPERS =======================
@@ -227,7 +247,7 @@ async function grantAccessOnly() {
 
   console.log(`Attempting to grant Viewer (${viewer}) access to Owner (${owner}) for ${duration} minutes...`);
   try {
-    const grant = await fetch("http://localhost:5000/partner/grant_access", {
+    const grant = await fetch(`${API_BASE_URL}/partner/grant_access`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ owner, viewer, duration_minutes: duration }),
@@ -242,7 +262,7 @@ async function grantAccessOnly() {
     }
   } catch (err) {
     console.error("❌ Network error during grantAccessOnly:", err);
-    alert("❌ Network error while granting access. Check server connection (http://localhost:5000).");
+    alert("❌ Network error while granting access. Check server connection.");
   }
 }
 
@@ -271,7 +291,7 @@ async function searchOnly() {
     initMap(lat, lon);
 
     try {
-      const res = await fetch("http://localhost:5000/user/search", {
+      const res = await fetch(`${API_BASE_URL}/user/search`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query, lat, lon, owner }),
@@ -292,19 +312,18 @@ async function searchOnly() {
 
       console.log("%c🧭 Rendering map markers...", "color: yellow;");
       addMarker(lat, lon, "red", "📍 Your Location");
-      addMarker(28.45, 77.30, "blue", "Test Marker");
 
       console.log("%c📦 Dummies data structure:", "color: lightblue;", decrypted.dummies);
       
-            if (decrypted.dummies && decrypted.dummies.length) {
-        console.log(` Rendering ${decrypted.dummies.length} dummy markers...`);
+      if (decrypted.dummies && decrypted.dummies.length) {
+        console.log(`🔵 Rendering ${decrypted.dummies.length} dummy markers...`);
         decrypted.dummies.forEach((d, i) => {
           console.log("Dummy data:", d);
           if (d.lat && d.lon) {
             console.log(`📍 Adding dummy marker ${i + 1} at [${d.lat}, ${d.lon}]`);
-            addMarker(d.lat, d.lon, "blue",  `Dummy ${i + 1}`);
+            addMarker(d.lat, d.lon, "blue", `🌀 Dummy ${i + 1}`);
           } else {
-            console.warn(`⚠ Dummy ${i + 1} missing coordinates:, d`);
+            console.warn(`⚠ Dummy ${i + 1} missing coordinates:`, d);
           }
         });
       } else {
