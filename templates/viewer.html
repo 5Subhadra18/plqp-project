@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Viewer Portal – Privacy-Preserving LBS</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    #map { height: 600px; margin-top: 10px; border: 1px solid #ccc; border-radius: 8px; }
+    input, button { padding: 6px; margin: 4px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; }
+    .control-bar { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <h2>📍 Viewer Dashboard</h2>
+    <button onclick="window.location.href='/'">⬅ Go to Owner Page</button>
+  </div>
+
+  <p>Enter your Viewer ID and the Owner ID to fetch location access (if authorized).</p>
+
+  <div class="control-bar">
+    <input type="text" id="owner" placeholder="Owner ID (e.g. user123)" />
+    <input type="text" id="viewer" placeholder="Viewer ID (e.g. agent456)" />
+    <input type="password" id="passphrase" placeholder="Passphrase (same as owner’s)" />
+    <button onclick="fetchOwnerLocation()">Fetch Owner’s Location</button>
+  </div>
+
+  <div id="map"></div>
+
+  <script>
+    let map;
+
+    // ------------------- MAP SETUP -------------------
+    function initMap(lat, lon) {
+      if (map) map.remove();
+      map = L.map("map").setView([lat, lon], 14);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
+    }
+
+    function addMarker(lat, lon, color, text) {
+      const icon = L.icon({
+        iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`,
+        shadowUrl: null,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+      });
+      L.marker([lat, lon], { icon }).addTo(map).bindPopup(text);
+    }
+
+    // ------------------- CRYPTO HELPERS -------------------
+    async function deriveKey(passphrase, saltHex) {
+      const enc = new TextEncoder();
+      const keyMaterial = await window.crypto.subtle.importKey(
+        "raw", enc.encode(passphrase), "PBKDF2", false, ["deriveKey"]
+      );
+      const salt = hexToBytes(saltHex);
+      return await window.crypto.subtle.deriveKey(
+        { name: "PBKDF2", salt, iterations: 200000, hash: "SHA-256" },
+        keyMaterial,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["decrypt"]
+      );
+    }
+
+    async function decryptEnvelope(env, passphrase) {
+      const { nonce_hex, tag_hex, ciphertext_hex, salt_hex } = env;
+      const nonce = hexToBytes(nonce_hex);
+      const tag = hexToBytes(tag_hex);
+      const ciphertext = hexToBytes(ciphertext_hex);
+      const combined = new Uint8Array(ciphertext.length + tag.length);
+      combined.set(ciphertext);
+      combined.set(tag, ciphertext.length);
+      const key = await deriveKey(passphrase, salt_hex);
+      const plaintext = await window.crypto.subtle.decrypt({ name: "AES-GCM", iv: nonce }, key, combined);
+      return JSON.parse(new TextDecoder().decode(plaintext));
+    }
+
+    function hexToBytes(hex) {
+      const bytes = new Uint8Array(hex.length / 2);
+      for (let i = 0; i < hex.length; i += 2)
+        bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+      return bytes;
+    }
+
+    // ------------------- MAIN FETCH FUNCTION -------------------
+    async function fetchOwnerLocation() {
+      const owner = document.getElementById("owner").value.trim();
+      const viewer = document.getElementById("viewer").value.trim();
+      const passphrase = document.getElementById("passphrase").value.trim();
+
+      if (!owner || !viewer || !passphrase) {
+        alert("⚠ Please enter owner ID, viewer ID, and passphrase.");
+        return;
+      }
+
+      try {
+        const res = await fetch("http://localhost:5000/view_location", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ owner, viewer }),
+        });
+
+        const data = await res.json();
+        if (data.error) {
+          alert("❌ " + data.error);
+          return;
+        }
+
+        // 🔓 Decrypt received encrypted data
+        const decrypted = await decryptEnvelope(data.enc_data, passphrase);
+        if (!decrypted.center) {
+          alert("⚠ No valid location found for owner.");
+          return;
+        }
+
+        // ✅ Only show owner's main (real) location
+        const center = decrypted.center;
+        initMap(center.lat, center.lon);
+        addMarker(center.lat, center.lon, "red", "📍 Owner’s Current Location");
+
+        alert("✅ Access verified — displaying owner’s live location.");
+      } catch (err) {
+        console.error("❌ Error fetching location:", err);
+        alert("Failed to fetch owner’s location. Ensure access is active.");
+      }
+    }
+  </script>
+</body>
+</html>

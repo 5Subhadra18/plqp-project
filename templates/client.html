@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Privacy-Preserving LBS</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    #map { height: 600px; margin-top: 10px; }
+    input, button { padding: 6px; margin: 4px; }
+  </style>
+</head>
+<body>
+  <h2>🔍 Privacy-Preserving LBS</h2>
+
+  <!-- USER SEARCH SECTION -->
+  <input type="text" id="query" placeholder="Enter place (e.g. hospital)" />
+  <input type="password" id="passphrase" placeholder="Enter passphrase" />
+  <input type="text" id="owner" placeholder="Your User ID (e.g. user123)" />
+  <input type="text" id="viewer" placeholder="Viewer ID (e.g. delivery_agent)" />
+  <button onclick="getLocation()">Search Nearby</button>
+
+  <br><br>
+
+  <!-- ACCESS GRANT SECTION -->
+  <h3>🔐 Temporary Access Control</h3>
+  <input type="text" id="g_owner" placeholder="Your User ID (e.g. user123)" />
+  <input type="text" id="g_viewer" placeholder="Viewer ID (e.g. delivery_agent)" />
+  <input type="number" id="duration" placeholder="Duration (minutes)" value="5" />
+  <button onclick="grantAccess()">Grant Access</button>
+
+  <div id="map"></div>
+
+  <script>
+    let map;
+
+    // ------------------- MAP SETUP -------------------
+    function initMap(lat, lon) {
+      if (map) map.remove();
+      map = L.map("map").setView([lat, lon], 14);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+      }).addTo(map);
+    }
+
+    function addMarker(lat, lon, color, text) {
+      const icon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+      });
+      L.marker([lat, lon], { icon }).addTo(map).bindPopup(text);
+    }
+
+    // ------------------- ACCESS CONTROL -------------------
+    async function grantAccess() {
+      const owner = document.getElementById("g_owner").value.trim();
+      const viewer = document.getElementById("g_viewer").value.trim();
+      const duration = parseInt(document.getElementById("duration").value.trim() || "5");
+
+      if (!owner || !viewer) {
+        alert("Please enter both owner and viewer IDs.");
+        return;
+      }
+
+      const body = { owner, viewer, duration_minutes: duration };
+
+      try {
+        const res = await fetch("http://localhost:5000/grant_access", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        const data = await res.json();
+        if (data.error) {
+          alert("Error: " + data.error);
+        } else {
+          alert(`✅ Access granted for ${viewer} for ${duration} minutes.`);
+          console.log("Access granted:", data);
+        }
+      } catch (err) {
+        console.error("Grant error:", err);
+        alert("Failed to contact backend.");
+      }
+    }
+
+    // ------------------- CRYPTO HELPERS -------------------
+    async function deriveKey(passphrase, saltHex) {
+      const enc = new TextEncoder();
+      const passphraseKey = await window.crypto.subtle.importKey(
+        "raw",
+        enc.encode(passphrase),
+        { name: "PBKDF2" },
+        false,
+        ["deriveKey"]
+      );
+      const salt = hexToBytes(saltHex);
+      return await window.crypto.subtle.deriveKey(
+        { name: "PBKDF2", salt, iterations: 200000, hash: "SHA-256" },
+        passphraseKey,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["decrypt"]
+      );
+    }
+
+    async function decryptEnvelope(envelope, passphrase) {
+      const { nonce_hex, tag_hex, ciphertext_hex, salt_hex } = envelope;
+      const nonce = hexToBytes(nonce_hex);
+      const tag = hexToBytes(tag_hex);
+      const ciphertext = hexToBytes(ciphertext_hex);
+
+      const combined = new Uint8Array(ciphertext.length + tag.length);
+      combined.set(ciphertext);
+      combined.set(tag, ciphertext.length);
+
+      const key = await deriveKey(passphrase, salt_hex);
+      const plaintext = await window.crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: nonce },
+        key,
+        combined
+      );
+      const dec = new TextDecoder();
+      return JSON.parse(dec.decode(plaintext));
+    }
+
+    function hexToBytes(hex) {
+      const bytes = new Uint8Array(hex.length / 2);
+      for (let i = 0; i < hex.length; i += 2)
+        bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+      return bytes;
+    }
+
+    // ------------------- MAIN FLOW -------------------
+    function getLocation() {
+      const query = document.getElementById("query").value.trim();
+      const passphrase = document.getElementById("passphrase").value.trim();
+      const owner = document.getElementById("owner").value.trim();
+      const viewer = document.getElementById("viewer").value.trim();
+
+      if (!query || !passphrase || !owner || !viewer) {
+        alert("Please fill all required fields (query, passphrase, owner, viewer).");
+        return;
+      }
+
+      if (!navigator.geolocation) {
+        alert("Geolocation not supported.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          console.log("📍 Location:", lat, lon);
+          initMap(lat, lon);
+
+          const response = await fetch("http://localhost:5000/search", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query, lat, lon, owner, viewer }),
+          });
+
+          const data = await response.json();
+          if (data.error) {
+            alert("Server error: " + data.error);
+            return;
+          }
+
+          if (!data.enc_data) {
+            alert("Unexpected response structure.");
+            console.log("Raw response:", data);
+            return;
+          }
+
+          try {
+            const decrypted = await decryptEnvelope(data.enc_data, passphrase);
+            console.log("✅ Decrypted result:", decrypted);
+
+            addMarker(lat, lon, "red", "📍 You");
+
+            decrypted.dummies.forEach((d) =>
+              addMarker(d.lat, d.lon, "blue", "🌀 Dummy")
+            );
+
+            decrypted.merged_places.forEach((p) =>
+              addMarker(p.lat, p.lon, "green", `${p.name}<br>${p.address || ""}`)
+            );
+          } catch (err) {
+            console.error("Decryption error:", err);
+            alert("❌ Failed to decrypt data — check your passphrase.");
+          }
+        },
+        (err) => alert("Permission denied or GPS error: " + err.message)
+      );
+    }
+  </script>
+</body>
+</html>

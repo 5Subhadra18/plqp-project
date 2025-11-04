@@ -1,0 +1,392 @@
+{
+  "query": "Hospital",
+  "center": {
+    "lat": 28.451448855545582,
+    "lon": 77.30358805760417
+  },
+  "radius_m": 5000,
+  "dummies": [
+    {
+      "lat": 28.455723859820587,
+      "lon": 77.30358805760417
+    },
+    {
+      "lat": 28.447798862179525,
+      "lon": 77.30739104317041
+    },
+    {
+      "lat": 28.451940671890192,
+      "lon": 77.29721484446958
+    },
+    {
+      "lat": 28.455281962434903,
+      "lon": 77.30927461007036
+    },
+    {
+      "lat": 28.444580492130726,
+      "lon": 77.3022061146376
+    },
+    {
+      "lat": 28.45790367454839,
+      "lon": 77.29891819622526
+    },
+    {
+      "lat": 28.449287448899636,
+      "lon": 77.3127319832344
+    }
+  ],
+  "candidates": [
+    {
+      "lat": 28.451448855545582,
+      "lon": 77.30358805760417,
+      "is_real": true
+    },
+    {
+      "lat": 28.455723859820587,
+      "lon": 77.30358805760417,
+      "is_real": false
+    },
+    {
+      "lat": 28.447798862179525,
+      "lon": 77.30739104317041,
+      "is_real": false
+    },
+    {
+      "lat": 28.451940671890192,
+      "lon": 77.29721484446958,
+      "is_real": false
+    },
+    {
+      "lat": 28.455281962434903,
+      "lon": 77.30927461007036,
+      "is_real": false
+    },
+    {
+      "lat": 28.444580492130726,
+      "lon": 77.3022061146376,
+      "is_real": false
+    },
+    {
+      "lat": 28.45790367454839,
+      "lon": 77.29891819622526,
+      "is_real": false
+    },
+    {
+      "lat": 28.449287448899636,
+      "lon": 77.3127319832344,
+      "is_real": false
+    }
+  ],
+  "merged_places": [
+    {
+      "name": "Batra Heart & Multispecialty Hospital",
+      "lat": 28.451478,
+      "lon": 77.3143731,
+      "address": "Block 21, Block F, Spring Field Colony, Sector 31, Faridabad",
+      "rating": 4.8,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "doctor",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJy3qoOELnDDkRaYZ4pDOgfjE",
+      "distance_m": 1054.4037399397664
+    },
+    {
+      "name": "Sparsh Hospital",
+      "lat": 28.4451029,
+      "lon": 77.3185822,
+      "address": "Sector 30, opp. Mother Dairy Milk Shop - Sector 29, Faridabad, Faridabad",
+      "rating": 4,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJ15Nx54jdDDkRAnMPwN7nxog",
+      "distance_m": 1626.935940908956
+    },
+    {
+      "name": "Geeta Hospital",
+      "lat": 28.4363506,
+      "lon": 77.3144312,
+      "address": "Near, Link Rd, opposite Huda Market, near Raghunath Temple, HBH Colony, Sector 28, Faridabad",
+      "rating": 4.7,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "doctor",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJVfOTGJLdDDkRhJ0vojBPMqk",
+      "distance_m": 1985.5637458118565
+    },
+    {
+      "name": "Asian Institute of Medical Sciences (Asian Hospital) - Best Hospital in Faridabad",
+      "lat": 28.4260095,
+      "lon": 77.29998359999999,
+      "address": "Badkal Flyover, Road, Sector 21A, Faridabad",
+      "rating": 4.4,
+      "types": [
+        "hospital",
+        "physiotherapist",
+        "point_of_interest",
+        "doctor",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJdSFfrundDDkR3_I2JzM71yU",
+      "distance_m": 2850.5975244197643
+    },
+    {
+      "name": "Anshu Hospital",
+      "lat": 28.4730851,
+      "lon": 77.3214423,
+      "address": "Sehatpur Rd, Shiv Colony, Palla Number 1, Shiva Colony, Sehatpur, Faridabad",
+      "rating": 3.8,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJdVumUQ3nDDkRWK-pXSRnvp0",
+      "distance_m": 2972.251865891189
+    },
+    {
+      "name": "DD Hospital – Best Hospital in Faridabad",
+      "lat": 28.4255514,
+      "lon": 77.3161068,
+      "address": "949, Shastri Colony, Sector 19, Faridabad",
+      "rating": 4.8,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJN660FZHdDDkRBqcQGjTDw1w",
+      "distance_m": 3129.0186265389666
+    },
+    {
+      "name": "Shivalik Hospital",
+      "lat": 28.4799846,
+      "lon": 77.3111632,
+      "address": "Shivalik Hospital, Huda Market, Sector 37, Faridabad",
+      "rating": 3.6,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJkazHWybdDDkRBBaUZI8WuBU",
+      "distance_m": 3258.2871202989168
+    },
+    {
+      "name": "Valencia Hospital",
+      "lat": 28.4802118,
+      "lon": 77.3143046,
+      "address": "5, 37, Ashoka Enclave Part II, Sector 37, Faridabad",
+      "rating": 2.8,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJnaWY2RbnDDkRx8B-kb7lYHU",
+      "distance_m": 3365.480964106079
+    },
+    {
+      "name": "Sarvodaya Hospital, Sec-19, Faridabad",
+      "lat": 28.4223223,
+      "lon": 77.3165605,
+      "address": "Sarvodaya Hospital, Sec-19, Gopi Colony, Old Faridabad, Faridabad",
+      "rating": 4.6,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "doctor",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJVVVVEbzdDDkRlqVfGK66pqA",
+      "distance_m": 3478.2526828751543
+    },
+    {
+      "name": "Shivalik Hospital",
+      "lat": 28.4800835,
+      "lon": 77.32806289999999,
+      "address": "F8JH+26P, Sehatpur Rd, Sector-91, Surya Colony, Sector 91, Faridabad",
+      "rating": 3.2,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJ4yfTRQnnDDkRb0tHpOGjL2Q",
+      "distance_m": 3982.6976045473293
+    },
+    {
+      "name": "Universal Hospital",
+      "lat": 28.4879536,
+      "lon": 77.3087086,
+      "address": "DND–KMP Expy, Block D, Molar band Extension, Badarpur, New Delhi",
+      "rating": 4.2,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJUR-0MRznDDkR4INgFPVG4hs",
+      "distance_m": 4089.8851033492647
+    },
+    {
+      "name": "Chandana Medical Centre",
+      "lat": 28.4162704,
+      "lon": 77.3196212,
+      "address": "52 and 85, New Sabzi Mandi, Sector 18 A, Old Faridabad, Faridabad",
+      "rating": 3.7,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJZ_AIubrdDDkRQ-79Bg-YCIw",
+      "distance_m": 4214.135358414199
+    },
+    {
+      "name": "Marengo Asia Hospitals, Faridabad",
+      "lat": 28.4156792,
+      "lon": 77.3187616,
+      "address": "Plot No.1, HUDA Staff Colony, Sector 16, Faridabad",
+      "rating": 4.4,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJu3bikLrdDDkRD2-HY62UL8w",
+      "distance_m": 4245.124687391852
+    },
+    {
+      "name": "Janak hospital - Best hospital in Faridabad, Best General Surgeon | laparoscopic surgeon in Faridabad",
+      "lat": 28.4214273,
+      "lon": 77.33409150000001,
+      "address": "Gali No, Gali No.3, 3, Kheri Rd, Indra Complex Colony, Sector 87, Neharpar Faridabad, Faridabad",
+      "rating": 3.9,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "doctor",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJIQiDkgndDDkRvQiCJDE5v5A",
+      "distance_m": 4476.574685202082
+    },
+    {
+      "name": "Supreme Hospital",
+      "lat": 28.4909688,
+      "lon": 77.2911821,
+      "address": "F7RR+CF4, Suraj Kund Rd, Charmwood Village, Faridabad",
+      "rating": 4,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJwZ-qVAvnDDkRtSD72di6fYA",
+      "distance_m": 4558.662228985435
+    },
+    {
+      "name": "PRAYAG MULTISPECIALITY HOSPITAL LLP",
+      "lat": 28.4075236,
+      "lon": 77.30550439999999,
+      "address": "NEAR, POLICE STATION, 67/ NH RAILWAY STATION ROAD, New Industrial Twp 5, Faridabad",
+      "rating": 4.6,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJs7367T_dDDkR2MvHy4INn7M",
+      "distance_m": 4887.858952740023
+    },
+    {
+      "name": "Metro Heart Institute with Multispeciality",
+      "lat": 28.4060327,
+      "lon": 77.3180343,
+      "address": "Sector 16 Rd, Nirman Kunj, ADB PWD Colony, Sector 16A, Faridabad",
+      "rating": 4.1,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "doctor",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJMYpbq7PdDDkRW3QZg86qTls",
+      "distance_m": 5243.902589533374
+    },
+    {
+      "name": "Amrita Hospital Faridabad",
+      "lat": 28.4259424,
+      "lon": 77.3540639,
+      "address": "Mata Amritanandamayi Marg, RPS City, Sector 88, Faridabad",
+      "rating": 4.2,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJoXGusBXdDDkR58DvlYp0ji4",
+      "distance_m": 5692.254739707642
+    },
+    {
+      "name": "Asian Fidelis Multi Speciality Hospital",
+      "lat": 28.4187166,
+      "lon": 77.356167,
+      "address": "C983+V3F, Gali No. 9, RPS City, Sector 88, Faridabad",
+      "rating": 4,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJa9Uopw_dDDkRIOTTa9xpWlU",
+      "distance_m": 6299.109303111705
+    },
+    {
+      "name": "Yatharth Super Speciality Hospital, Sector 88, Faridabad",
+      "lat": 28.4189954,
+      "lon": 77.3564269,
+      "address": "RPS City, Sector 88, Faridabad",
+      "rating": 4.8,
+      "types": [
+        "hospital",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJDcL0wZjdDDkR2lox6SnO2Ps",
+      "distance_m": 6302.059413653542
+    }
+  ],
+  "candidate_count": 8,
+  "places_count": 20,
+  "timestamp_utc": "2025-10-27T16:41:07Z"
+}

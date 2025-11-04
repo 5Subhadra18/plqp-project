@@ -1,0 +1,228 @@
+{
+  "query": "Collage",
+  "center": {
+    "lat": 28.45143510877215,
+    "lon": 77.30342758024744
+  },
+  "radius_m": 5000,
+  "dummies": [
+    {
+      "lat": 28.455710113047154,
+      "lon": 77.30342758024744
+    },
+    {
+      "lat": 28.44778511540609,
+      "lon": 77.30723056531927
+    },
+    {
+      "lat": 28.45192692511676,
+      "lon": 77.29705436794141
+    },
+    {
+      "lat": 28.45526821566147,
+      "lon": 77.30911413197434
+    },
+    {
+      "lat": 28.444566745357292,
+      "lon": 77.30204563746054
+    },
+    {
+      "lat": 28.457889927774957,
+      "lon": 77.29875771947565
+    },
+    {
+      "lat": 28.449273702126202,
+      "lon": 77.3125715046889
+    }
+  ],
+  "candidates": [
+    {
+      "lat": 28.45143510877215,
+      "lon": 77.30342758024744,
+      "is_real": true
+    },
+    {
+      "lat": 28.455710113047154,
+      "lon": 77.30342758024744,
+      "is_real": false
+    },
+    {
+      "lat": 28.44778511540609,
+      "lon": 77.30723056531927,
+      "is_real": false
+    },
+    {
+      "lat": 28.45192692511676,
+      "lon": 77.29705436794141,
+      "is_real": false
+    },
+    {
+      "lat": 28.45526821566147,
+      "lon": 77.30911413197434,
+      "is_real": false
+    },
+    {
+      "lat": 28.444566745357292,
+      "lon": 77.30204563746054,
+      "is_real": false
+    },
+    {
+      "lat": 28.457889927774957,
+      "lon": 77.29875771947565,
+      "is_real": false
+    },
+    {
+      "lat": 28.449273702126202,
+      "lon": 77.3125715046889,
+      "is_real": false
+    }
+  ],
+  "merged_places": [
+    {
+      "name": "Manav Rachna Dental College",
+      "lat": 28.4508951,
+      "lon": 77.2873019,
+      "address": "Sector – 43,Delhi, Suraj Kund Badkhal Rd, Faridabad",
+      "rating": 4.5,
+      "types": [
+        "university",
+        "point_of_interest",
+        "health",
+        "establishment"
+      ],
+      "place_id": "ChIJn9ZlBKvgDDkR4jg8YUzjx7E",
+      "distance_m": 1577.6733096209616
+    },
+    {
+      "name": "Manav Rachna University",
+      "lat": 28.4499972,
+      "lon": 77.28556119999999,
+      "address": "Manav Rachna University, Plot B, Surajkund Road, Gadakhor Basti Village, Sector 43, Faridabad",
+      "rating": 4,
+      "types": [
+        "university",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJJTSKBKvgDDkR675bSGgv0aQ",
+      "distance_m": 1754.0200253722926
+    },
+    {
+      "name": "JB Knowledge Park Admission office",
+      "lat": 28.4283264,
+      "lon": 77.30711389999999,
+      "address": "44, Sector 27/A, Faridabad",
+      "rating": 4.4,
+      "types": [
+        "university",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJNcZaWwXdDDkR4kuLqny4u4I",
+      "distance_m": 2594.726846311409
+    },
+    {
+      "name": "Ihmcs Faridabad",
+      "lat": 28.474762,
+      "lon": 77.30599579999999,
+      "address": "12/4, NH-19, above Lala Banarsi Plaza, Sarai Khawaja Village, Sector 36, Faridabad",
+      "rating": 4.9,
+      "types": [
+        "university",
+        "school",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJN3jHeynnDDkRy2Y84accPBc",
+      "distance_m": 2605.953264713772
+    },
+    {
+      "name": "EIT City Office(Best College for BBA, BCA, B.Tech in Faridabad)",
+      "lat": 28.4271965,
+      "lon": 77.3266067,
+      "address": "DC Plaza 3rd Floor, Faridabad Bypass Rd, above Mahadev Hyundai, opposite Sector 29, Faridabad",
+      "rating": 4.5,
+      "types": [
+        "university",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJ78vJtZjdDDkRL1DAiDqpxzo",
+      "distance_m": 3521.4441247981335
+    },
+    {
+      "name": "Talab road iti girls collage faridabad",
+      "lat": 28.417907,
+      "lon": 77.31751,
+      "address": "C899+526, MCF Office Rd, Kapoori Colony, Old Faridabad, Faridabad",
+      "rating": null,
+      "types": [
+        "store",
+        "point_of_interest",
+        "food",
+        "establishment"
+      ],
+      "place_id": "ChIJw9mmMwDdDDkRKX7R-eDRR94",
+      "distance_m": 3974.3216000357434
+    },
+    {
+      "name": "NEHRU COLLEGE",
+      "lat": 28.4050631,
+      "lon": 77.31511590000001,
+      "address": "1A-230, Shahid Bhagat Singh Marg, Block B, Shahid Bhagat Singh Marg, Block B, New Industrial Twp 1, New Industrial Township, Faridabad",
+      "rating": 4,
+      "types": [
+        "university",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJN_UZAD_cDDkRu5sdWM2GZrk",
+      "distance_m": 5281.487913320799
+    },
+    {
+      "name": "PT. J. L. N GOVT. COLLEGE, FARIDABAD",
+      "lat": 28.4049959,
+      "lon": 77.3149602,
+      "address": "C837+XXW, Sector 16A, Faridabad",
+      "rating": 3.8,
+      "types": [
+        "university",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJVVVVFa3dDDkRY5-CeNu1G1E",
+      "distance_m": 5285.514023402345
+    },
+    {
+      "name": "St. Peter's College, Faridabad",
+      "lat": 28.406846,
+      "lon": 77.34326759999999,
+      "address": "Sector 86, Faridabad",
+      "rating": 3.6,
+      "types": [
+        "university",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJtcvoLp7dDDkR66JDE3ueSEM",
+      "distance_m": 6305.52691382262
+    },
+    {
+      "name": "Modern International College Of Education",
+      "lat": 28.4111015,
+      "lon": 77.3552259,
+      "address": "96, Sector Rd, RPS City, Neharpar Faridabad, Faridabad",
+      "rating": 4,
+      "types": [
+        "university",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJt2PpYB_dDDkRxFtVHHnBOzQ",
+      "distance_m": 6765.259821516968
+    }
+  ],
+  "candidate_count": 8,
+  "places_count": 10,
+  "timestamp_utc": "2025-10-27T16:32:13Z"
+}

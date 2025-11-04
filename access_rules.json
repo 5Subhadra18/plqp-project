@@ -1,0 +1,16 @@
+[
+  {
+    "owner": "customerA",
+    "viewer": "agent007",
+    "start": 1761590733.8387816,
+    "end": 1761590793.8387816,
+    "active": false
+  },
+  {
+    "owner": "User123",
+    "viewer": "Agent1",
+    "start": 1762080477.5175114,
+    "end": 1762080537.5175114,
+    "active": false
+  }
+]

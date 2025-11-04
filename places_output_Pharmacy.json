@@ -1,0 +1,419 @@
+{
+  "query": "Pharmacy",
+  "center": {
+    "lat": 28.45140156268329,
+    "lon": 77.30355602950027
+  },
+  "radius_m": 5000,
+  "dummies": [
+    {
+      "lat": 28.455676566958296,
+      "lon": 77.30355602950027
+    },
+    {
+      "lat": 28.447751569317234,
+      "lon": 77.3073590133656
+    },
+    {
+      "lat": 28.4518933790279,
+      "lon": 77.29718281921616
+    },
+    {
+      "lat": 28.45523466957261,
+      "lon": 77.3092425794231
+    },
+    {
+      "lat": 28.444533199268434,
+      "lon": 77.30217408715178
+    },
+    {
+      "lat": 28.4578563816861,
+      "lon": 77.29888617021
+    },
+    {
+      "lat": 28.449240156037344,
+      "lon": 77.3126999510408
+    }
+  ],
+  "candidates": [
+    {
+      "lat": 28.45140156268329,
+      "lon": 77.30355602950027,
+      "is_real": true
+    },
+    {
+      "lat": 28.455676566958296,
+      "lon": 77.30355602950027,
+      "is_real": false
+    },
+    {
+      "lat": 28.447751569317234,
+      "lon": 77.3073590133656,
+      "is_real": false
+    },
+    {
+      "lat": 28.4518933790279,
+      "lon": 77.29718281921616,
+      "is_real": false
+    },
+    {
+      "lat": 28.45523466957261,
+      "lon": 77.3092425794231,
+      "is_real": false
+    },
+    {
+      "lat": 28.444533199268434,
+      "lon": 77.30217408715178,
+      "is_real": false
+    },
+    {
+      "lat": 28.4578563816861,
+      "lon": 77.29888617021,
+      "is_real": false
+    },
+    {
+      "lat": 28.449240156037344,
+      "lon": 77.3126999510408,
+      "is_real": false
+    }
+  ],
+  "merged_places": [
+    {
+      "name": "Krishna pharmacy",
+      "lat": 28.4491117,
+      "lon": 77.3151314,
+      "address": "shop.2, Plot no.1, Block 3, Spring Field Colony, Sector 31, Faridabad",
+      "rating": 5,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJQS1GgIXnDDkR0LAAenGpe1I",
+      "distance_m": 1159.9685715021558
+    },
+    {
+      "name": "JAI DEV PHARMACY",
+      "lat": 28.4614007,
+      "lon": 77.28864519999999,
+      "address": "Gate no. 30, C-3614, opposite Omaxe building, Block C, Greenfields, Sector 41, Faridabad",
+      "rating": 5,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJ76Loya3nDDkRGCxNLvKQhRM",
+      "distance_m": 1833.3226342038276
+    },
+    {
+      "name": "Apollo Pharmacy Faridabad Sector 43",
+      "lat": 28.4605222,
+      "lon": 77.2869417,
+      "address": "Shop No 7, Omaxe Hills, Suraj Kund Road, Block C, Sector 43, Faridabad",
+      "rating": 4.4,
+      "types": [
+        "pharmacy",
+        "drugstore",
+        "store",
+        "health",
+        "food",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJe_d0zyPhDDkRpTnTtz6S_6Q",
+      "distance_m": 1914.8522452305824
+    },
+    {
+      "name": "Apollo Pharmacy Sector 34 Ashoka Enclave",
+      "lat": 28.4711682,
+      "lon": 77.3106353,
+      "address": "No. 1 & 2, Old Sher Shah Suri Rd, near Riddhi Siddhi Plaza, Ashoka Enclave, Sector 35, Faridabad",
+      "rating": 5,
+      "types": [
+        "pharmacy",
+        "drugstore",
+        "store",
+        "health",
+        "food",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJGVnl2ZHnDDkR_hiG0kf-Z2U",
+      "distance_m": 2304.3225901423903
+    },
+    {
+      "name": "Apollo Pharmacy Faridabad Sector 34",
+      "lat": 28.4718502,
+      "lon": 77.3149565,
+      "address": "SCF 2, Tilpat Rd, Ashoka Enclave, Ashoka Enclave 1, Sector 34, Faridabad",
+      "rating": 4.3,
+      "types": [
+        "pharmacy",
+        "drugstore",
+        "store",
+        "health",
+        "food",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJbQPcMmnnDDkR4lA5tHXcRy8",
+      "distance_m": 2532.215550788733
+    },
+    {
+      "name": "Healthy India pharmacy",
+      "lat": 28.427602,
+      "lon": 77.29143309999999,
+      "address": "Shop No 225, C7JW+JFH, market faridabad121001, Sector 21C, Faridabad",
+      "rating": 3.7,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJhZHe6uXdDDkRAPzxwIcwFCk",
+      "distance_m": 2899.722992174601
+    },
+    {
+      "name": "Brothers pharmacy",
+      "lat": 28.4729315,
+      "lon": 77.32133259999999,
+      "address": "Sehatpur Rd, Shiv Colony, Chauhan Colony, Palla, Faridabad",
+      "rating": null,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJgezmUw3nDDkR-Cg-gp-lqkg",
+      "distance_m": 2958.2261938338975
+    },
+    {
+      "name": "davaindia GENERIC PHARMACY",
+      "lat": 28.4223795,
+      "lon": 77.3168649,
+      "address": "Shop. 508 C, opp. Sarvodaya Hospital, Gopi Colony, Sector 19, Faridabad",
+      "rating": 4.9,
+      "types": [
+        "pharmacy",
+        "drugstore",
+        "store",
+        "health",
+        "food",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJFQQoMeDdDDkRL-StzGGz5KA",
+      "distance_m": 3479.6044813884982
+    },
+    {
+      "name": "PC PHARMACY",
+      "lat": 28.4158173,
+      "lon": 77.3160752,
+      "address": "Daulatabad Village, Sector 19, Faridabad",
+      "rating": 3.7,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJJXf9FrrdDDkRNpTUpBmuYQ8",
+      "distance_m": 4141.824131192027
+    },
+    {
+      "name": "Reyansh pharmacy",
+      "lat": 28.4888086,
+      "lon": 77.29478449999999,
+      "address": "Plot no D-1/3 shiv Durga vihar, Lakkarpur, Surajkund, faridabaod",
+      "rating": 4.9,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJ-8_BEWDnDDkRqc_Tq55P-PE",
+      "distance_m": 4246.9215472733395
+    },
+    {
+      "name": "Zeelab Pharmacy - Sector-16 Faridabad",
+      "lat": 28.4163612,
+      "lon": 77.32141949999999,
+      "address": "Shop no.1, Ward No.10, Old Sabzi Mandi, Barh Mohalla, Sector 16, Faridabad",
+      "rating": 5,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJ7X6sqNHdDDkRjBQO1w2Q2Jo",
+      "distance_m": 4269.922139872037
+    },
+    {
+      "name": "Family pharmacy",
+      "lat": 28.4893904,
+      "lon": 77.31000499999999,
+      "address": "F8Q6+Q22, MolarBand Extension Kennal Rd, Block D, Block B, Molar band Extension, Badarpur, New Delhi",
+      "rating": 5,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJr_HBOgDnDDkRSTbgYU7VbwE",
+      "distance_m": 4270.941897915206
+    },
+    {
+      "name": "HolyGolee Pharmacy Pvt. Ltd. (Retail Store)",
+      "lat": 28.4900877,
+      "lon": 77.3070001,
+      "address": "G-177, 40 Feet Rd, Block G, Molar band Extension, Badarpur, New Delhi",
+      "rating": 5,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJyzH9l1jnDDkRaMXzMPljc6Q",
+      "distance_m": 4314.854990646617
+    },
+    {
+      "name": "Faridabad Pharmacy",
+      "lat": 28.413011,
+      "lon": 77.28909709999999,
+      "address": "C77Q+6J5, Patel Chowk, Haryana Gramin Bank, Faridabad, NCR, Region",
+      "rating": 5,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJEbpKMtjdDDkRbd4tvf8pJE8",
+      "distance_m": 4496.874891527979
+    },
+    {
+      "name": "davaindia GENERIC PHARMACY",
+      "lat": 28.4948674,
+      "lon": 77.3036095,
+      "address": "Extension, Dharamveer Market, Budh Bihar, Block A, Tajpur Pahari, Badarpur, New Delhi",
+      "rating": 5,
+      "types": [
+        "pharmacy",
+        "drugstore",
+        "store",
+        "health",
+        "food",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJXUBD7PnnDDkRsMzogGeZEo8",
+      "distance_m": 4833.183417852915
+    },
+    {
+      "name": "INDRA PHARMACY",
+      "lat": 28.4949535,
+      "lon": 77.30490879999999,
+      "address": "D-2, Budh Vihar Rd, near DHRAMVEER MARKET, D2, Tajpur Pahari Village, Badarpur, Delhi, New Delhi",
+      "rating": 5,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJ3bpr1ybnDDkRz8uu4zTzDW8",
+      "distance_m": 4844.559289162761
+    },
+    {
+      "name": "Apollo pharmacy",
+      "lat": 28.4934656,
+      "lon": 77.326591,
+      "address": "Shop No, 49, Molarband School Rd, Om Nagar, Sai Nagar, Mithapur Extension, Mithapur, New Delhi",
+      "rating": 1,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJ66bqMQrnDDkRKTVwWM1pWf0",
+      "distance_m": 5191.026022928457
+    },
+    {
+      "name": "Apollo Pharmacy Sector 86",
+      "lat": 28.4105486,
+      "lon": 77.34000360000002,
+      "address": "No. 02, Ozone Park, Swami Vivekananda Marg, near Proptrade, Sector 86, Faridabad",
+      "rating": 4.3,
+      "types": [
+        "pharmacy",
+        "drugstore",
+        "store",
+        "health",
+        "food",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJ-9uDcQTdDDkRVr0sJc6HWnM",
+      "distance_m": 5773.870271891723
+    },
+    {
+      "name": "Apollo Pharmacy Sector 88",
+      "lat": 28.418875,
+      "lon": 77.3559241,
+      "address": "112, opp. Emerald, RPS City, Sector 88, Faridabad",
+      "rating": 4.1,
+      "types": [
+        "pharmacy",
+        "drugstore",
+        "store",
+        "health",
+        "food",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJvab41PwiyTsRrVj2IPYL3ts",
+      "distance_m": 6269.066421587704
+    },
+    {
+      "name": "ARNAV pharmacy",
+      "lat": 28.4144585,
+      "lon": 77.35415130000001,
+      "address": "Arnav pharmacy, Central Mall, RPS SAVANA, G19, RPS City, Sector 88, Faridabad",
+      "rating": 4.4,
+      "types": [
+        "pharmacy",
+        "store",
+        "health",
+        "point_of_interest",
+        "establishment"
+      ],
+      "place_id": "ChIJQyQaGgDdDDkRGfKSbAtHLJk",
+      "distance_m": 6430.4395398906045
+    }
+  ],
+  "candidate_count": 8,
+  "places_count": 20,
+  "timestamp_utc": "2025-10-27T16:39:49Z"
+}
