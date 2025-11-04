@@ -1,0 +1,10 @@
+Flask
+Flask-Cors
+gunicorn
+psycopg2-binary
+geopy
+requests
+pycryptodome
+phe
+folium
+python-dotenv
