@@ -2,6 +2,7 @@ import os
 import json
 import sys
 import secrets
+import time
 from pathlib import Path
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, render_template
@@ -30,6 +31,21 @@ app.register_blueprint(partner_bp, url_prefix="/partner")
 ENCRYPT_RESPONSE = os.getenv("ENCRYPT_RESPONSE", "1").lower() in ("1", "true", "yes")
 ENCRYPT_PASSPHRASE = os.getenv("ENCRYPT_PASSPHRASE", "mySecret123")
 
+# 🆕 IN-MEMORY STORAGE (replaces JSON files)
+# Structure: { "owner_id": {"enc_data": {...}, "timestamp": float} }
+LOCATION_CACHE = {}
+CACHE_EXPIRY_SECONDS = 3600  # 1 hour
+
+def clean_expired_cache():
+    """Remove cached entries older than CACHE_EXPIRY_SECONDS"""
+    now = time.time()
+    expired_keys = [k for k, v in LOCATION_CACHE.items() 
+                    if now - v.get("timestamp", 0) > CACHE_EXPIRY_SECONDS]
+    for key in expired_keys:
+        del LOCATION_CACHE[key]
+    if expired_keys:
+        print(f"🧹 Cleaned {len(expired_keys)} expired cache entries")
+
 # -----------------------------------------------------
 # ROUTES
 # -----------------------------------------------------
@@ -47,8 +63,8 @@ def viewer_page():
 @app.route("/view_location", methods=["POST"])
 def view_location():
     """
-    Viewer requests owner's location.
-    If access is valid, return ONLY the owner's real location.
+    Viewer requests owner's location from in-memory cache.
+    If access is valid, return ONLY the owner's encrypted location data.
     """
     try:
         data = request.get_json()
@@ -63,23 +79,21 @@ def view_location():
         if not access_manager.is_access_allowed(owner, viewer):
             return jsonify({"error": "Unauthorized access or access expired"}), 403
 
-        # 🔹 Locate latest encrypted file
-        backend_dir = Path(__file__).parent
-        enc_files = sorted(
-            backend_dir.glob("places_output_*.enc.json"),
-            key=lambda f: f.stat().st_mtime
-        )
-        if not enc_files:
-            return jsonify({"error": "No encrypted location data found"}), 404
+        # 🔹 Clean expired cache entries
+        clean_expired_cache()
 
-        latest_file = enc_files[-1]
-        with open(latest_file, "r", encoding="utf-8") as f:
-            enc_content = json.load(f)
+        # 🔹 Retrieve from in-memory cache
+        if owner not in LOCATION_CACHE:
+            return jsonify({"error": "No location data found for this owner"}), 404
 
-        # 🔹 Extract encrypted data
-        enc_data = enc_content.get("enc_data", enc_content)
+        cached_entry = LOCATION_CACHE[owner]
+        enc_data = cached_entry.get("enc_data")
 
-        # ✅ Return only enc_data (the viewer will decrypt and see only owner center)
+        if not enc_data:
+            return jsonify({"error": "Invalid cached data"}), 500
+
+        # ✅ Return encrypted data
+        print(f"✅ Viewer '{viewer}' accessed owner '{owner}' location")
         return jsonify({"enc_data": enc_data})
 
     except Exception as e:
@@ -92,7 +106,7 @@ def view_location():
 def search():
     """
     Owner searches for nearby places — includes owner, dummy, and merged data.
-    Encrypted result saved for later viewer access.
+    Encrypted result stored in memory for later viewer access.
     """
     try:
         access_manager.revoke_expired()
@@ -100,7 +114,7 @@ def search():
         query = data.get("query")
         lat = data.get("lat")
         lon = data.get("lon")
-        owner = data.get("owner")
+        owner = data.get("owner", "anonymous_user")
 
         if not query or lat is None or lon is None:
             return jsonify({"error": "Missing query or coordinates"}), 400
@@ -125,13 +139,15 @@ def search():
             "ciphertext_hex": ciphertext.hex(),
         }
 
-        # 🔹 Save encrypted file (overwrites last)
-        filename = f"places_output_{owner or 'user'}.enc.json"
-        filepath = Path(__file__).parent / filename
-        with open(filepath, "w", encoding="utf-8") as f:
-            json.dump({"enc_data": enc_data}, f, indent=2, ensure_ascii=False)
+        # 🔹 Store in memory instead of file
+        LOCATION_CACHE[owner] = {
+            "enc_data": enc_data,
+            "timestamp": time.time()
+        }
 
-        print(f"🔒 Encrypted file saved to {filepath}")
+        print(f"🔒 Encrypted location stored in memory for owner: {owner}")
+        print(f"📊 Current cache size: {len(LOCATION_CACHE)} entries")
+        
         return jsonify({"enc_data": enc_data})
 
     except Exception as e:
@@ -162,10 +178,20 @@ def grant_access():
         return jsonify({"error": str(e)}), 500
 
 
+# ------------------ CACHE STATUS (DEBUG) ------------------
+@app.route("/cache_status", methods=["GET"])
+def cache_status():
+    """Debug endpoint to view current cache contents"""
+    clean_expired_cache()
+    status = {
+        "total_entries": len(LOCATION_CACHE),
+        "owners": list(LOCATION_CACHE.keys()),
+        "cache_expiry_seconds": CACHE_EXPIRY_SECONDS
+    }
+    return jsonify(status)
+
+
 # -----------------------------------------------------
-import os
-
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))  # Use Render's assigned port
+    port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
-
