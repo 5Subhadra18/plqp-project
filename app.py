@@ -155,6 +155,35 @@ def search():
         return jsonify({"error": str(e)}), 500
 
 
+# ------------------ UPLOAD LOCATION ------------------
+@app.route("/upload_location", methods=["POST"])
+def upload_location():
+    """
+    Owner uploads cached location data to server.
+    This is called when granting access to ensure data is available.
+    """
+    try:
+        data = request.get_json()
+        owner = data.get("owner")
+        enc_data = data.get("enc_data")
+
+        if not owner or not enc_data:
+            return jsonify({"error": "Missing owner or encrypted data"}), 400
+
+        # Store in memory cache
+        LOCATION_CACHE[owner] = {
+            "enc_data": enc_data,
+            "timestamp": time.time()
+        }
+
+        print(f"📤 Location data uploaded for owner: {owner}")
+        return jsonify({"message": "✅ Location uploaded successfully"})
+
+    except Exception as e:
+        print("❌ Error in /upload_location:", e)
+        return jsonify({"error": str(e)}), 500
+
+
 # ------------------ GRANT ACCESS ------------------
 @app.route("/grant_access", methods=["POST"])
 def grant_access():

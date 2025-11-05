@@ -43,6 +43,10 @@
     button:hover {
       background-color: #3182ce;
     }
+    button:disabled {
+      background-color: #cbd5e0;
+      cursor: not-allowed;
+    }
     #map {
       width: 100%;
       height: 60vh;
@@ -59,6 +63,15 @@
       margin: 10px 0;
       border-radius: 4px;
       font-size: 0.9rem;
+    }
+    .status {
+      background-color: #d1fae5;
+      border-left: 4px solid #10b981;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      display: none;
     }
     @media (min-width: 640px) {
       .input-group {
@@ -84,9 +97,12 @@
   <!-- 🔍 Section 1: Location Search -->
   <section>
     <h3>🔍 Search Locations</h3>
-    <p>Search for places (e.g., hospital, cafe, school). Your real and dummy locations will appear on the map.</p>
+    <p>Search for places (e.g., hospital, cafe, school). Your location will be stored locally and on the server.</p>
     <div class="note">
       💡 <strong>Remember your Owner ID</strong> - you'll need it to grant access to viewers.
+    </div>
+    <div class="status" id="cache-status">
+      ✅ <strong>Location cached locally</strong> - You can now grant access to viewers
     </div>
     <div class="input-group">
       <input type="text" id="owner" placeholder="Your Owner ID (e.g. user123)" />
@@ -108,7 +124,7 @@
     </div>
     <div class="input-group">
       <input type="number" id="duration" placeholder="Duration (minutes)" min="1" value="5" />
-      <button onclick="grantAccessOnly()" style="background-color: #48bb78;">Grant Access</button>
+      <button onclick="grantAccessAndUpload()" style="background-color: #48bb78;">Grant Access & Upload Location</button>
     </div>
     <button onclick="window.location.href='/viewer'" style="background-color: #ed8936;">Go to Viewer Page ➜</button>
   </section>
@@ -118,22 +134,53 @@
   <script>
 let map;
 
-// ✅ DYNAMIC API BASE URL - Automatically detects environment
+// ✅ DYNAMIC API BASE URL
 const API_BASE_URL = (() => {
   const hostname = window.location.hostname;
-  
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return 'http://localhost:5000';
   }
-  
   if (hostname === 'plqp-project.onrender.com') {
     return 'https://plqp-project.onrender.com';
   }
-  
   return window.location.origin;
 })();
 
 console.log('🌐 API Base URL:', API_BASE_URL);
+
+// ======================= LOCAL STORAGE HELPERS =======================
+function saveToLocalStorage(ownerId, encData) {
+  try {
+    const key = `location_${ownerId}`;
+    localStorage.setItem(key, JSON.stringify({
+      enc_data: encData,
+      timestamp: Date.now()
+    }));
+    console.log(`💾 Saved location data to localStorage for owner: ${ownerId}`);
+    document.getElementById('cache-status').style.display = 'block';
+    return true;
+  } catch (err) {
+    console.error('❌ Failed to save to localStorage:', err);
+    return false;
+  }
+}
+
+function loadFromLocalStorage(ownerId) {
+  try {
+    const key = `location_${ownerId}`;
+    const data = localStorage.getItem(key);
+    if (!data) {
+      console.warn(`⚠ No cached data found for owner: ${ownerId}`);
+      return null;
+    }
+    const parsed = JSON.parse(data);
+    console.log(`📥 Loaded location data from localStorage for owner: ${ownerId}`);
+    return parsed.enc_data;
+  } catch (err) {
+    console.error('❌ Failed to load from localStorage:', err);
+    return null;
+  }
+}
 
 // ======================= MAP SETUP =======================
 function initMap(lat, lon) {
@@ -242,9 +289,9 @@ async function decryptEnvelope(envelope, passphrase) {
   }
 }
 
-// ======================= 🔐 GRANT ACCESS =======================
-async function grantAccessOnly() {
-  console.log("%c🔐 Starting grantAccessOnly() process...", "color: lightgreen;");
+// ======================= 🔐 GRANT ACCESS & UPLOAD =======================
+async function grantAccessAndUpload() {
+  console.log("%c🔐 Starting grantAccessAndUpload() process...", "color: lightgreen;");
   const owner = document.getElementById("grant_owner").value.trim();
   const viewer = document.getElementById("viewer").value.trim();
   const duration = parseInt(document.getElementById("duration").value.trim() || "5");
@@ -254,24 +301,51 @@ async function grantAccessOnly() {
     return;
   }
 
-  console.log(`Attempting to grant Viewer (${viewer}) access to Owner (${owner}) for ${duration} minutes...`);
+  // 1️⃣ Load encrypted data from localStorage
+  const encData = loadFromLocalStorage(owner);
+  if (!encData) {
+    alert("❌ No cached location found! Please search for a location first.");
+    return;
+  }
+
   try {
-    const grant = await fetch(`${API_BASE_URL}/partner/grant_access`, {
+    // 2️⃣ Upload to server cache
+    console.log("%c📤 Uploading location data to server...", "color: blue;");
+    const uploadRes = await fetch(`${API_BASE_URL}/upload_location`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ owner, enc_data: encData }),
+    });
+    const uploadData = await uploadRes.json();
+    
+    if (uploadData.error) {
+      alert("❌ Failed to upload location: " + uploadData.error);
+      return;
+    }
+    console.log("%c✅ Location uploaded successfully", "color: green;");
+
+    // 3️⃣ Grant access
+    console.log(`%c🔓 Granting access to viewer ${viewer}...`, "color: lightgreen;");
+    const grantRes = await fetch(`${API_BASE_URL}/partner/grant_access`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ owner, viewer, duration_minutes: duration }),
     });
-    const grantRes = await grant.json();
-    console.log("%c✅ Access grant response:", "color: lightgreen;", grantRes);
-
-    if (grantRes.error) {
-      alert("❌ Error granting access: " + grantRes.error);
+    const grantData = await grantRes.json();
+    
+    if (grantData.error) {
+      alert("❌ Error granting access: " + grantData.error);
     } else {
-      alert(`✅ Access successfully granted to Viewer (${viewer}) for ${duration} minutes.\n\nViewer can now access your location using:\n- Owner ID: ${owner}\n- Viewer ID: ${viewer}`);
+      alert(`✅ Success!\n\n` +
+            `Location uploaded to server\n` +
+            `Access granted to Viewer (${viewer}) for ${duration} minutes.\n\n` +
+            `Viewer can now access your location using:\n` +
+            `- Owner ID: ${owner}\n` +
+            `- Viewer ID: ${viewer}`);
     }
   } catch (err) {
-    console.error("❌ Network error during grantAccessOnly:", err);
-    alert("❌ Network error while granting access. Check server connection.");
+    console.error("❌ Network error:", err);
+    alert("❌ Network error. Check server connection.");
   }
 }
 
@@ -313,6 +387,9 @@ async function searchOnly() {
         return;
       }
 
+      // 💾 Save encrypted data to localStorage
+      saveToLocalStorage(owner, data.enc_data);
+
       const decrypted = await decryptEnvelope(data.enc_data, passphrase);
       if (!decrypted) {
         console.warn("⚠ Decryption returned null — skipping markers.");
@@ -339,7 +416,10 @@ async function searchOnly() {
         }
       });
 
-      alert(`✅ Location stored successfully!\n\nYour Owner ID: ${owner}\nYou can now grant access to viewers.`);
+      alert(`✅ Location stored successfully!\n\n` +
+            `Your location is cached locally and on the server.\n` +
+            `Owner ID: ${owner}\n\n` +
+            `You can now grant access to viewers.`);
       console.log("%c🎯 Marker rendering completed!", "color: green;");
     } catch (err) {
       console.error("❌ Network/search error:", err);
@@ -349,7 +429,16 @@ async function searchOnly() {
   .catch((err) => alert("❌ GPS error: " + err.message));
 }
 
-document.addEventListener("DOMContentLoaded", () => initMap(37.422, -122.084));
+// ======================= ON PAGE LOAD =======================
+document.addEventListener("DOMContentLoaded", () => {
+  initMap(37.422, -122.084);
+  
+  // Check if there's cached location data
+  const ownerId = document.getElementById("owner").value.trim();
+  if (ownerId && loadFromLocalStorage(ownerId)) {
+    document.getElementById('cache-status').style.display = 'block';
+  }
+});
 </script>
 </body>
 </html>
